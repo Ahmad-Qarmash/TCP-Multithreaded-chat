@@ -1,5 +1,4 @@
-#TCP Multithreaded Chat on python
-
+# TCP Multithreaded Chat on python
 In this project you’ll create a simple chat program.
 
 Definitions:
