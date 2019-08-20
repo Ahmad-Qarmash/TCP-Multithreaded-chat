@@ -43,7 +43,7 @@ Hint: Server & Client can define a message type to distinguish between “send m
 
 ### Change Status:
 
-*   Client { chs }
+*   Client types { chs }
 *	Client can send change status message to server to switch between Available and UnAvailable.
 
 ### Print History:
