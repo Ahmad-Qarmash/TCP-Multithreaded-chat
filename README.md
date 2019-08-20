@@ -1,5 +1,5 @@
 # TCP Multithreaded Chat on python
-In this project you’ll create a simple chat program.
+In this project we’ll create a simple chat program.
 
 ## Definitions:
 *	Client: Represents a user.
