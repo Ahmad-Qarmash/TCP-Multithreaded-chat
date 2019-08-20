@@ -96,6 +96,7 @@ def main():
     client_socket.send(user_details)
     message = client_socket.recv(BUFFER_SIZE).decode("utf8")
 
+    # extract the client_id from the message
     if "Welcome to the server your id is" in message:
         t = strftime("%H:%M", gmtime())
         print(t, "Server Message:", message)
