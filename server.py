@@ -4,7 +4,6 @@ from threading import Thread
 import pickle
 import os
 from time import gmtime, strftime
-import signal
 
 
 clients = {}
@@ -82,6 +81,7 @@ def handle_client(client):  # Takes client socket as argument.
                                 # check the availability of the reciever
                                 if clients[receiver_id]["Status"] == "Available":
                                     print("SUCCESS")
+                                    
                                     if(receiver_id == client_id):
                                         client.sendall(bytes("\n you sent the message to yourself successfully", "utf8"))
                                     else:
@@ -89,6 +89,7 @@ def handle_client(client):  # Takes client socket as argument.
 
                                     msg = clients[client_id]["Name"] + ", " + clients[client_id]["Title"] + ", " + clients[client_id]["Company"] + ": \n" + f"   {msg}"
                                     connection.sendall(bytes(msg, "utf8"))
+                                    
                                     # create a file and append messages on this file
                                     filename = f"{client_id}to{receiver_id}.txt"
                                     with open(filename, "a") as f:
