@@ -27,6 +27,11 @@ def handle_client(client):  # Takes client socket as argument.
     """Handles a single client connection."""
     while True:
         try:
+            # To get client id we used this "fileno" methode 
+            # In Unix and related computers operating systems, 
+            # a file descriptor (FD, less frequently fildes) is an abstract indicator used to access a file or other input/output resource,
+            #  such as a pipe or network connection. File descriptors are part of the POSIX application programming interface. A file descriptor is a non-negative integer,
+            #  represented in C and python programming languages as the type int.
             client_id = client.fileno()
             name = clients[client_id]["Name"]
 
@@ -34,7 +39,7 @@ def handle_client(client):  # Takes client socket as argument.
             data = pickle.loads(data)
             msg_type = data[0]
 
-            if msg_type == "{quit}":
+            if msg_type == "quit":
                 broadcast(client, f"\n {name} has left the chat.")
                 client.close()
                 del clients[client_id]
@@ -49,7 +54,7 @@ def handle_client(client):  # Takes client socket as argument.
                     os.remove(os.path.join(cwd, f))
                 break
 
-            elif msg_type == "{chs}":
+            elif msg_type == "chs":
                 state = clients[client_id]["Status"]
                 if state == "Available":
                     broadcast(client, f"\n {name} is Not Available now")
@@ -58,7 +63,7 @@ def handle_client(client):  # Takes client socket as argument.
                     broadcast(client, f"\n {name} is  Available now.")
                     clients[client_id]["Status"] = "Available"
 
-            elif msg_type == "{send}":
+            elif msg_type == "send":
                 try:
                     receiver_id = int(data[1])
                 except ValueError:
@@ -77,27 +82,28 @@ def handle_client(client):  # Takes client socket as argument.
                                 # check the availability of the reciever
                                 if clients[receiver_id]["Status"] == "Available":
                                     print("SUCCESS")
-                                    # when you send the message to yourself
                                     if(receiver_id == client_id):
                                         client.sendall(bytes("\n you sent the message to yourself successfully", "utf8"))
                                     else:
                                         client.sendall(bytes("SUCCESS", "utf8"))
-                                        msg = clients[client_id]["Name"] + ", " + clients[client_id]["Title"] + ", " + clients[client_id]["Company"] + ": \n" + f"   {msg}"
-                                        connection.sendall(bytes(msg, "utf8"))
-                                        # create a file and append messages on this file
-                                        filename = f"{client_id}to{receiver_id}.txt"
-                                        with open(filename, "a") as f:
+
+                                    msg = clients[client_id]["Name"] + ", " + clients[client_id]["Title"] + ", " + clients[client_id]["Company"] + ": \n" + f"   {msg}"
+                                    connection.sendall(bytes(msg, "utf8"))
+                                    # create a file and append messages on this file
+                                    filename = f"{client_id}to{receiver_id}.txt"
+                                    with open(filename, "a") as f:
+                                        x = strftime("%H:%M", gmtime())
+                                        f.write(f"{x} - {msg} \r\n")
+                                        f.close()
+                                    # this is to store both sended and recieved messages
+                                    reverse = f"{receiver_id}to{client_id}.txt"
+                                    # this if used to not store the self message twice 
+                                    # when you send the message to yourself
+                                    if filename != reverse:
+                                        with open(reverse, "a") as f:
                                             x = strftime("%H:%M", gmtime())
                                             f.write(f"{x} - {msg} \r\n")
                                             f.close()
-                                        # this is to store both sended and recieved messages
-                                        reverse = f"{receiver_id}to{client_id}.txt"
-                                        # this if used to not store the self message twice 
-                                        if filename != reverse:
-                                            with open(reverse, "a") as f:
-                                                x = strftime("%H:%M", gmtime())
-                                                f.write(f"{x} - {msg} \r\n")
-                                                f.close()
                                 else:
                                     msg = "send failed " + clients[receiver_id]["Name"] +" is not alive right now"
                                     client.sendall(bytes(msg, "utf8"))
@@ -137,7 +143,7 @@ def handle_incoming_connections():
 
 
 def main():
-    
+
     print("Waiting for connections...")
 
     ACCEPT_THREAD = Thread(target=handle_incoming_connections)

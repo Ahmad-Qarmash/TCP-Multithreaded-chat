@@ -29,7 +29,7 @@ Hint: Server & Client can define a message type to distinguish between “send m
 
 ### Chatting:
 
-*   Client types {send} 
+*   Client types { send } 
 *	To send a message, the client provide receiver ID and message body to the server.
 *	Server should then redirect message to the receiver ID with full sender info if receiver status is “Available”.
 *	Server will also reply with “SUCCESS” to the sender.
@@ -43,20 +43,20 @@ Hint: Server & Client can define a message type to distinguish between “send m
 
 ### Change Status:
 
-*   Client {chs}
+*   Client { chs }
 *	Client can send change status message to server to switch between Available and UnAvailable.
 
 ### Print History:
 
-*   Client types {history}
+*   Client types { history }
 *	Client enters another client ID to view its history.
 *	Client read local log file (cookies) related to the given ID if exists, and print messages history in a clear format.
 *	Otherwise prints “No History”.
 
 ### Close:
 
-*	Client choose to close {quit} by closing the socket.
+*	Client choose to close { quit } by closing the socket.
 *	Server should handle close signal coming from client and remove related entry from dictionary.
 *	Server then close its socket.
 
-note: be careful to write {send} in this format.
+note: be careful to write { send } without the Braces.
