@@ -36,7 +36,6 @@ Hint: Server & Client can define a message type to distinguish between “send m
 *	Sender then prints that message sent successfully.
 *	Otherwise, no message is sent to the desired receiver.
 *	Server will also reply with “FAIL” to the sender.
-*	Sender then prints message failed to deliver message because …
 *	When a client receive a message, it should print full sender info with date and message body in a nice format.
 *	Sender and receiver clients should store conversation between them on the server in a special log file (Open file and append) in a clear format.
 *	Note: Client should store conversation in a special log file for each other client it sent/received messages to/from.
@@ -59,4 +58,4 @@ Hint: Server & Client can define a message type to distinguish between “send m
 *	Server should handle close signal coming from client and remove related entry from dictionary.
 *	Server then close its socket.
 
-note: be careful to write { send } without the Braces.
+note: Write { send } without the Braces.
