@@ -50,7 +50,7 @@ Hint: Server & Client can define a message type to distinguish between “send m
 
 *   Client types { history }
 *	Client enters another client ID to view its history.
-*	Client read local log file (cookies) related to the given ID if exists, and print messages history in a clear format.
+*	Client read local log file (such as cookies) related to the given ID if exists, and print messages history in a clear format.
 *	Otherwise prints “No History”.
 
 ### Close:
