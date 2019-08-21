@@ -38,7 +38,7 @@ Hint: Server & Client can define a message type to distinguish between “send m
 *	Server will also reply with “FAIL” to the sender.
 *	Sender then prints message failed to deliver message because …
 *	When a client receive a message, it should print full sender info with date and message body in a nice format.
-*	Sender and receiver clients should store conversation between them locally in a special log file (Open file and append) in a clear format.
+*	Sender and receiver clients should store conversation between them on the server in a special log file (Open file and append) in a clear format.
 *	Note: Client should store conversation in a special log file for each other client it sent/received messages to/from.
 
 ### Change Status:
