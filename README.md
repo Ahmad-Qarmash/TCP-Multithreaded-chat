@@ -43,7 +43,7 @@ Hint: Server & Client can define a message type to distinguish between “send m
 
 ### Change Status:
 
-*   Client { chs }
+*   Client types { chs }
 *	Client can send change status message to server to switch between Available and UnAvailable.
 
 ### Print History:
@@ -55,7 +55,7 @@ Hint: Server & Client can define a message type to distinguish between “send m
 
 ### Close:
 
-*	Client choose to close { quit } by closing the socket.
+*	Client choose { quit } to close the socket.
 *	Server should handle close signal coming from client and remove related entry from dictionary.
 *	Server then close its socket.
 
