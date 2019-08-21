@@ -16,16 +16,17 @@ def receive():
     """Handles receiving of messages."""
     try:
         while True:
+            
             msg = client_socket.recv(BUFFER_SIZE).decode("utf8")
             if not msg:
                 break
-            else:
-                if msg == "SUCCESS":
+            elif msg == "SUCCESS":
                     print("\n message sent Successfully")
-                else:
-                    x = strftime("%H:%M", gmtime())
-                    print("\n", x, "- ", msg)
-    except Exception as e:  # Possibly client has left the chat.
+            else:
+                x = strftime("%H:%M", gmtime())
+                print("\n", x, "- ", msg)
+
+    except Exception:  # Possibly client has left the chat.
         print("Connection Ended")
 
 
@@ -37,11 +38,14 @@ def send():
         msg_type = input(str("\n Enter your option:"))
         info_list.append(msg_type)
         if msg_type == "quit":
+
             message_type = pickle.dumps(info_list)
             client_socket.send(message_type)
             client_socket.close()
             exit()
+
         elif msg_type == "history":
+
             rcv = input(str("\n Enter the id to print the history with him: "))
             try:
                 f = open(f"{client_id}to{rcv}.txt", "r")
@@ -50,15 +54,20 @@ def send():
                     print(contents)
             except:
                 print("No History")
+        
         elif msg_type == "chs":
             message_type = pickle.dumps(info_list)
             client_socket.send(message_type)
+        
         elif msg_type == "send":
+
             receiver = input(str("\n Enter an id to send him a message: "))
             msg = input(str("\n my message >> "))
+
             info_list.append(receiver)
             info_list.append(msg)
             message_info = pickle.dumps(info_list)
+
             client_socket.sendall(message_info)
         else:
             print("Please Enter a valid input")

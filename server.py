@@ -23,6 +23,34 @@ def broadcast(current_sock, msg):
             sock.sendall(bytes(msg, "utf8"))
 
 
+def remove_files_for_closed_connection(client_id):
+    # get the current working directory 
+    cwd = os.getcwd()
+    # get every file that starts with the client_id (that belongs to the quited client)
+    file_list = [f for f in os.listdir(cwd) if f.startswith(f"{client_id}")]
+    # delete the history of that client
+    for f in file_list:
+        os.remove(os.path.join(cwd, f))
+
+
+def wirte_on_file(client_id,receiver_id,msg):
+    # create a file and append messages on this file
+    filename = f"{client_id}to{receiver_id}.txt"
+    with open(filename, "a") as f:
+        x = strftime("%H:%M", gmtime())
+        f.write(f"{x} - {msg} \r\n")
+        f.close()
+      
+     # this is to store both sended and recieved messages
+    reverse = f"{receiver_id}to{client_id}.txt"
+    # this condition is used prvent storing the self message twice when you send the message to yourself
+    if filename != reverse:
+        with open(reverse, "a") as f:
+            x = strftime("%H:%M", gmtime())
+            f.write(f"{x} - {msg} \r\n")
+            f.close()
+
+
 def handle_client(client):  # Takes client socket as argument.
     """Handles a single client connection."""
     while True:
@@ -45,13 +73,8 @@ def handle_client(client):  # Takes client socket as argument.
                 del clients[client_id]
                 connections.remove(client)
 
-                # get the current working directory 
-                cwd = os.getcwd()
-                # get every file that starts with the client_id (that belongs to the quited client)
-                file_list = [f for f in os.listdir(cwd) if f.startswith(f"{client_id}")]
-                # delete the history of that client
-                for f in file_list:
-                    os.remove(os.path.join(cwd, f))
+                remove_files_for_closed_connection(client_id)
+    
                 break
 
             elif msg_type == "chs":
@@ -89,21 +112,9 @@ def handle_client(client):  # Takes client socket as argument.
 
                                     msg = clients[client_id]["Name"] + ", " + clients[client_id]["Title"] + ", " + clients[client_id]["Company"] + ": \n" + f"   {msg}"
                                     connection.sendall(bytes(msg, "utf8"))
-                                    # create a file and append messages on this file
-                                    filename = f"{client_id}to{receiver_id}.txt"
-                                    with open(filename, "a") as f:
-                                        x = strftime("%H:%M", gmtime())
-                                        f.write(f"{x} - {msg} \r\n")
-                                        f.close()
-                                    # this is to store both sended and recieved messages
-                                    reverse = f"{receiver_id}to{client_id}.txt"
-                                    # this if used to not store the self message twice 
-                                    # when you send the message to yourself
-                                    if filename != reverse:
-                                        with open(reverse, "a") as f:
-                                            x = strftime("%H:%M", gmtime())
-                                            f.write(f"{x} - {msg} \r\n")
-                                            f.close()
+                                    # store chat history
+                                    wirte_on_file(client_id,receiver_id,msg)
+                            
                                 else:
                                     msg = "send failed " + clients[receiver_id]["Name"] +" is not alive right now"
                                     client.sendall(bytes(msg, "utf8"))
