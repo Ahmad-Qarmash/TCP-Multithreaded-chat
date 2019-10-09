@@ -5,13 +5,16 @@ from threading import Thread
 import re
 from time import gmtime, strftime
 
-  
+'''
+constants
+'''
+
 HOST = "localhost"
 PORT = 33301
 BUFFER_SIZE = 1024
 client_socket = socket(AF_INET, SOCK_STREAM)
 
-
+##############################################################################
 def receive():
     """Handles receiving of messages."""
     try:
@@ -29,7 +32,7 @@ def receive():
     except Exception:  # Possibly client has left the chat.
         print("Connection Ended")
 
-
+##############################################################################
 def send():
     """Handles sending of messages."""
     while True:
@@ -37,16 +40,16 @@ def send():
         info_list = []
         msg_type = input(str("\n Enter your option:"))
         info_list.append(msg_type)
+        
         if msg_type == "quit":
-
             message_type = pickle.dumps(info_list)
             client_socket.send(message_type)
             client_socket.close()
             exit()
 
         elif msg_type == "history":
-
             rcv = input(str("\n Enter the id to print the history with him: "))
+            
             try:
                 f = open(f"{client_id}to{rcv}.txt", "r")
                 if f.mode == 'r':
@@ -72,13 +75,14 @@ def send():
         else:
             print("Please Enter a valid input")
 
-
+##############################################################################
 def handle_command_line_arguments():
      # We are trying to initialize the parser
     parser = argparse.ArgumentParser()
     parser.add_argument("name", help="Enter your name: ")
     parser.add_argument("jop", help="Enter your Jop Title: ")
     parser.add_argument("company", help="Enter your Company Name: ")
+    
     # Trying to parse the argument
     try:
         args = parser.parse_args()
@@ -86,15 +90,17 @@ def handle_command_line_arguments():
         jop = args.jop
         company = args.company
         information = [name, jop, company]
+        
         # Pickling is a way to convert a python object (list, dict, etc.) into a character stream. 
         # The idea is that this character stream contains all the information necessary to reconstruct the object in another python script.
         data = pickle.dumps(information)
         return data
+      
     except:      
         print("Incorrect Information for the client")
         exit()
 
-
+##############################################################################
 def main():
 
     client_socket.connect((HOST, PORT))
@@ -116,7 +122,7 @@ def main():
         receive_thread.start()
         send()
 
-  
+ ############################################################################## 
 if __name__ == "__main__":
     main()
    
